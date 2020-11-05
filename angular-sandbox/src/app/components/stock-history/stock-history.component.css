@@ -1,0 +1,37 @@
+﻿.stockHistoryComponent .header, .stockHistoryComponent .subHeader {
+  font-size: 24px; }
+
+.stockHistoryComponent .subHeader {
+  height: 35px; }
+
+.stockHistoryComponent .topPanel {
+  margin-bottom: 20px; }
+
+.stockHistoryComponent .bottomPanel {
+  min-width: 100%;
+  display: flex; }
+
+.stockHistoryComponent .sideBottomPanel, .stockHistoryComponent .leftPanel, .stockHistoryComponent .rightPanel {
+  min-width: 50%;
+  flex-grow: 1;
+  display: flex; }
+
+.stockHistoryComponent .leftPanel {
+  float: left; }
+
+.stockHistoryComponent .rightPanel {
+  float: right; }
+
+.stockHistoryComponent .border, .stockHistoryComponent .stockList, .stockHistoryComponent .stockPriceList {
+  border: 1px solid #adadad;
+  border-radius: 4px; }
+
+.stockHistoryComponent .stockList {
+  flex-grow: 1;
+  margin-right: 8px;
+  min-height: 69vh; }
+
+.stockHistoryComponent .stockPriceList {
+  flex-grow: 1;
+  margin-left: 8px;
+  min-height: 69vh; }

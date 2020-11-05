@@ -1,0 +1,28 @@
+.stockListComponent {
+
+  .stockListTable {
+    display: block;
+    height: 70vh;
+    overflow-y: scroll;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .stockListTable tr th, .stockListTable tr td {
+    width: 50%;
+  }
+
+  .stockListTable tr:not(:first-child):hover, .selected {
+    color: #FFFFFF !important;
+    background-color: #337AB7;
+    cursor: pointer;
+  }
+
+  .stockListTable td {
+    font-weight: bold !important;
+  }
+
+  .stockListTable th {
+    font-weight: normal !important;
+  }
+}

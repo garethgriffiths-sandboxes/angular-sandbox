@@ -1,0 +1,31 @@
+.stockPriceListComponent {
+  .header {
+    font-size: 24px;
+    color: #FFFFFF;
+    background-color: #337AB7;
+    display: flex;
+  }
+
+  .header > div {
+    flex-grow: 1;
+  }
+
+  .stockPriceListTable {
+    display: block;
+    height: 65vh;
+    overflow-y: scroll;
+    width: 100%;
+  }
+
+  .stockPriceListTable tr th, .stockPriceListTable tr td {
+    width: 90%;
+  }
+
+  .stockPriceListTable td {
+    font-weight: bold !important;
+  }
+
+  .stockPriceListTable th {
+    font-weight: normal !important;
+  }
+}

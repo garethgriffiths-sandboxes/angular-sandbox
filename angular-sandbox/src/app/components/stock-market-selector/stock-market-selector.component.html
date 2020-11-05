@@ -1,0 +1,8 @@
+<div class="stockMarketSelectorComponent">
+  <mat-select multiple [placeholder]="'Select a Stock Market'" [(ngModel)]="selectedStockMarkets"
+    (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelect)="onItemDeSelect($event)">
+    <mat-option *ngFor="let stockMarket of stockMarkets" [value]="stockMarket">
+      {{stockMarket.name}}
+    </mat-option>
+  </mat-select>
+</div>

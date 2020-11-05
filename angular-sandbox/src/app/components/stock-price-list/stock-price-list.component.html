@@ -1,0 +1,23 @@
+<div class="stockPriceListComponent">
+  <div class="header">
+    <div>
+      {{selectedStock?.symbol}}
+    </div>
+    <div>
+      {{selectedStock?.name}}
+    </div>
+    <div>
+      {{selectedStock?.exchange}}
+    </div>
+  </div>
+  <table class="stockPriceListTable">
+    <tr>
+      <th>Date</th>
+      <th>Price</th>
+    </tr>
+    <tr *ngFor="let stockPrice of stockPrices">
+      <td>{{stockPrice.date | date:'dd-MM-yyyy'}}</td>
+      <td>{{stockPrice.price | number}}</td>
+    </tr>
+  </table>
+</div>
