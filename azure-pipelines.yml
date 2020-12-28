@@ -8,7 +8,7 @@ trigger:
 
 variables:
   uiSource: "angular-sandbox"
-  uiBuild: "$(uiSource)/build"
+  uiBuild: "$(uiSource)/dist"
 
 pool:
   vmthumbnail: ../"ubuntu-latest"
