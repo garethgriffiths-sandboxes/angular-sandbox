@@ -30,7 +30,7 @@ steps:
   - task: ArchiveFiles@2
     displayName: Archive
     inputs:
-      rootFolderOrFile: "$(uiBuild)"
+      rootFolderOrFile: "$(uiBuild)/angular-sandbox"
       includeRootFolder: false
       archiveType: "zip"
       archiveFile: "$(Build.ArtifactStagingDirectory)/ui-$(Build.BuildId).zip"
