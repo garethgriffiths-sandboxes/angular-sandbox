@@ -23,11 +23,13 @@ export class StockDataService {
 
   getStockMarkets(): Observable<StockMarket[]> {
     const getStockMarketsUrl = `${API_URL}/${this.stocksUrl}/exchanges`;
-    return this.httpClient
-      .get<StockMarket[]>(getStockMarketsUrl)
-      .pipe(
-        catchError(this.handleError('getStockMarkets', []))
-      );
+    //return this.httpClient
+     // .get<StockMarket[]>(getStockMarketsUrl)
+      //.pipe(
+       // catchError(this.handleError('getStockMarkets', []))
+     // );
+
+      return new Observable<StockMarket[]>();
   }
 
   getStocksByStockMarkets(stockMarkets: StockMarket[]): Observable<Stock[]> {
