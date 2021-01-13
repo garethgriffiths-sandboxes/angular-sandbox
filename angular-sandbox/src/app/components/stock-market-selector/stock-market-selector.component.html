@@ -1,8 +1,17 @@
-<div class="stockMarketSelectorComponent">
-  <mat-select multiple [placeholder]="'Select a Stock Market'" [(ngModel)]="selectedStockMarkets"
-    (onSelect)="onItemSelect($event)" (onSelectAll)="onSelectAll($event)" (onDeSelect)="onItemDeSelect($event)">
-    <mat-option *ngFor="let stockMarket of stockMarkets" [value]="stockMarket">
+<mat-form-field class="stock-market-chip-list">
+  <mat-label>Stock Markets</mat-label>
+  <mat-chip-list #chipList aria-label="Select a Stock Market">
+    <mat-chip *ngFor="let stockMarket of stockMarkets" [selectable]="selectable" [removable]="removable" (removed)="remove()">
+      {{stockMarket.name}}
+      <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+    </mat-chip>
+    <input [placeholder]="'Select a Stock Market'" #stockMarketInput [formControl]="stockMarketControl"
+      [matAutocomplete]="auto" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let stockMarket of stockMarkets | async" [value]="stockMarket">
       {{stockMarket.name}}
     </mat-option>
-  </mat-select>
-</div>
+  </mat-autocomplete>
+</mat-form-field>
