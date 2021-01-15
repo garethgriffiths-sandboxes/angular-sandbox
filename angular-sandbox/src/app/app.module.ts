@@ -13,9 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
-import { StockMarketSelectorComponent } from './components/stock-market-selector/stock-market-selector.component';
-import { StockListComponent } from './components/stock-list/stock-list.component';
-import { StockPriceListComponent } from './components/stock-price-list/stock-price-list.component';
+import { FundSelectorComponent } from './components/fund-selector/fund-selector.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
@@ -23,10 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    StockMarketSelectorComponent,
-    StockListComponent,
-    StockPriceListComponent
-  ],
+    FundSelectorComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
