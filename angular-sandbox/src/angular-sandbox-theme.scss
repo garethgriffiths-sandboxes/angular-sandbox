@@ -1,0 +1,71 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$angular-sandbox-palette-dark-blue: (50 : #e0eefd,
+  100 : #b3d5fb,
+  200 : #80baf8,
+  300 : #4d9ef5,
+  400 : #2689f2,
+  500 : #0074f0,
+  600 : #006cee,
+  700 : #0061ec,
+  800 : #0057e9,
+  900 : #0044e5,
+  A100 : #ffffff,
+  A200 : #d9e2ff,
+  A400 : #a6baff,
+  A700 : #8ca7ff,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  ));
+
+$angular-sandbox-palette-green: (50 : #eef6ea,
+  100 : #d5e9c9,
+  200 : #badaa6,
+  300 : #9ecb82,
+  400 : #89c067,
+  500 : #74b54c,
+  600 : #6cae45,
+  700 : #61a53c,
+  800 : #579d33,
+  900 : #448d24,
+  A100 : #daffcc,
+  A200 : #b6ff99,
+  A400 : #91ff66,
+  A700 : #7fff4d,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #000000,
+    500 : #000000,
+    600 : #000000,
+    700 : #000000,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #000000,
+  ));
+
+$angular-sandbox-app-primary: mat-palette($angular-sandbox-palette-dark-blue);
+$angular-sandbox-app-accent: mat-palette($angular-sandbox-palette-green);
+
+$angular-sandbox-app-theme: mat-light-theme((color: (primary: $angular-sandbox-app-primary,
+      accent: $angular-sandbox-app-accent)));
+
+@include angular-material-theme($angular-sandbox-app-theme);
