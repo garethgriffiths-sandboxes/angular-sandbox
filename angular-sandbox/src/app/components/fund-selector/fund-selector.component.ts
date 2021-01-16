@@ -11,7 +11,7 @@ import { MatChipInputEvent } from '@angular/material/chips';
 @Component({
   selector: 'fund-selector',
   templateUrl: './fund-selector.component.html',
-  styleUrls: ['./fund-selector.component.min.css']
+  styleUrls: ['./fund-selector.component.scss']
 })
 
 export class FundSelectorComponent implements OnInit {
