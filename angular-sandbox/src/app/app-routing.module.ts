@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
 import { FundSelectorComponent } from './components/fund-selector/fund-selector.component';
 
 const routes: Routes = [
-  { path: '/fund-selector', component: FundSelectorComponent }
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'fund-selector', component: FundSelectorComponent }
 ];
 
 @NgModule({
