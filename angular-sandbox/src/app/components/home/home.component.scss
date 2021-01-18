@@ -1,9 +1,13 @@
 .tile {
     position: absolute;
     left: 0px;
-    top: 20px;
+    top: 15px;
 
     .tile-title {
+        margin-left: 15px;
+    }
+
+    .tile-component {
         margin-left: 15px;
     }
 }
