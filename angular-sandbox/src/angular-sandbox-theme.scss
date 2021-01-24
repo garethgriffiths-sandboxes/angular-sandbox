@@ -69,3 +69,10 @@ $angular-sandbox-app-theme: mat-light-theme((color: (primary: $angular-sandbox-a
       accent: $angular-sandbox-app-accent)));
 
 @include angular-material-theme($angular-sandbox-app-theme);
+
+$angular-sandbox-typography: mat-typography-config($font-family: 'Poppins, monospace',
+  /* h4 */
+  $subheading-1: mat-typography-level(18px, 26px, 400),
+  $body-1: mat-typography-level(16px, 24px, 400));
+
+@include angular-material-typography($angular-sandbox-typography);
