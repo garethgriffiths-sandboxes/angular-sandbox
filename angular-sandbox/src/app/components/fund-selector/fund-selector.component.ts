@@ -19,18 +19,18 @@ export class FundSelectorComponent implements OnInit {
     private fundDataService: FundDataService) {
     this.filteredFunds = this.fundControl.valueChanges.pipe(
       startWith(null),
-      map((fund: string | null) => fund ? this._filter(fund) : this.funds.slice()));
+      map((fund: string | null) => fund ? this._filter(fund) : this.allFunds.slice()));
   }
 
   ngOnInit() {
     this.getFunds();
   }
+
   getFunds(): void {
     this.fundDataService.getFunds()
-      .subscribe(funds => this.funds = funds);
+      .subscribe(funds => this.allFunds = funds);
   }
 
-  funds: Fund[];
   visible = true;
   selectable = true;
   removable = true;
@@ -38,17 +38,19 @@ export class FundSelectorComponent implements OnInit {
   fundControl = new FormControl();
   filteredFunds: Observable<Fund[]>;
   selectedFunds: Fund[];
-
+  allFunds: Fund[];
   dropdownSettings = {};
   @ViewChild('fundInput') fundInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
-    const selectedFund = event.value;
+    const value = event.value;
 
-    if (selectedFund) {
-    //  this.selectedFundMarkets.push(selectedFundMarket);
+    var fundToAdd = this.allFunds.find(fund => fund.name === value || fund.symbol === value)
+
+    if ((value || '').trim()) {
+      this.selectedFunds.push(fundToAdd);
     }
 
     if (input) {
@@ -58,8 +60,8 @@ export class FundSelectorComponent implements OnInit {
     this.fundControl.setValue(null);
   }
 
-  remove(fruit: Fund): void {
-    const index = this.selectedFunds.indexOf(fruit);
+  remove(fundToRemove: Fund): void {
+    const index = this.selectedFunds.findIndex(fund => fund.name === fundToRemove.name || fund.symbol === fundToRemove.symbol);
 
     if (index >= 0) {
       this.selectedFunds.splice(index, 1);
@@ -67,13 +69,17 @@ export class FundSelectorComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.selectedFunds.push(event.option.value);
+    var value = event.option.viewValue;
+    var fundToAdd = this.allFunds.find(fund => fund.name === value || fund.symbol === value)
+
+    this.selectedFunds.push(fundToAdd);
     this.fundInput.nativeElement.value = '';
     this.fundControl.setValue(null);
   }
 
   private _filter(value: string): Fund[] {
-    const filterValue = value;
-    return this.funds.filter(fund => fund.name.indexOf(filterValue) === 0);
+    const filterValue = value.toLowerCase();
+
+    return this.allFunds.filter(fund => fund.name.toLowerCase().indexOf(filterValue) === 0 || fund.symbol.toLowerCase().indexOf(filterValue) === 0);
   }
 }

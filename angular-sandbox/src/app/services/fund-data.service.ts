@@ -21,17 +21,17 @@ export class FundDataService {
 
   getFunds(): Observable<Fund[]> {
     var funds = [
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''}),
-      new Fund({name: '', symbol: ''})
+      new Fund({ name: 'Hudson ETF', symbol: 'HUETF' }),
+      new Fund({ name: 'Fall 500 Index', symbol: 'FAlIN' }),
+      new Fund({ name: 'Black Mont Core', symbol: 'BLMC' }),
+      new Fund({ name: 'Red Henge Contrafund', symbol: 'RHCF' }),
+      new Fund({ name: 'Yellow Street Growth', symbol: 'YSGR' }),
+      new Fund({ name: 'Green Crescent Inv', symbol: 'GCINV' }),
+      new Fund({ name: 'Winter Stream Trust', symbol: 'WSTRU' }),
+      new Fund({ name: 'First Road ETF', symbol: 'FRETF' }),
+      new Fund({ name: 'Winter Bay Trust', symbol: 'WBTX' }),
+      new Fund({ name: 'Summery View Cash', symbol: 'SVCC' }),
+      new Fund({ name: 'Oak City Market', symbol: 'OCMA' })
     ];
     return of(funds);
   }
