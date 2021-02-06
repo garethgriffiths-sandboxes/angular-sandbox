@@ -1,5 +1,9 @@
 export class Fund {
-  symbol: string;
-  name: string;
-  exchange: string;
+  public name: string;
+  public symbol: string;
+  public exchange: string;
+
+  public constructor(init?: Partial<Fund>) {
+    Object.assign(this, init);
+  }
 }

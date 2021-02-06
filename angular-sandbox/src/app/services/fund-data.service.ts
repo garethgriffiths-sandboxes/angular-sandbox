@@ -19,15 +19,21 @@ export class FundDataService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getFundMarkets(): Observable<Fund[]> {
-    const getFundMarketsUrl = `${API_URL}/${this.fundsUrl}/exchanges`;
-    //return this.httpClient
-     // .get<FundMarket[]>(getFundMarketsUrl)
-      //.pipe(
-       // catchError(this.handleError('getFundMarkets', []))
-     // );
-
-      return new Observable<Fund[]>();
+  getFunds(): Observable<Fund[]> {
+    var funds = [
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''}),
+      new Fund({name: '', symbol: ''})
+    ];
+    return of(funds);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
