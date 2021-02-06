@@ -25,9 +25,8 @@ export class FundSelectorComponent implements OnInit {
   ngOnInit() {
     this.getFunds();
   }
-
   getFunds(): void {
-    this.fundDataService.getFundMarkets()
+    this.fundDataService.getFunds()
       .subscribe(funds => this.funds = funds);
   }
 
