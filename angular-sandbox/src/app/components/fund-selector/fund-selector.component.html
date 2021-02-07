@@ -2,8 +2,8 @@
   <mat-form-field class="fund-form-field">
     <mat-label>Funds</mat-label>
     <mat-chip-list #chipList aria-label="Select a Fund">
-      <mat-chip *ngFor="let fund of selectedFunds" [selectable]="selectable" [removable]="removable"
-        (removed)="remove()">
+      <mat-chip color="accent" *ngFor="let fund of selectedFunds" [ariaOrientation]="horizontal" [selectable]="selectable" [removable]="removable"
+        (removed)="remove(fund)">
         {{fund.symbol}}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
@@ -16,5 +16,10 @@
         {{fund.name}} ({{fund.symbol}})
       </mat-option>
     </mat-autocomplete>
+    <mat-selection-list #selectedFunds>
+      <mat-list-option *ngFor="let fund of selectedFunds">
+        {{fund.name}} ({{fund.symbol}})
+      </mat-list-option>
+    </mat-selection-list>
   </mat-form-field>
 </div>

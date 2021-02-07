@@ -37,7 +37,7 @@ export class FundSelectorComponent implements OnInit {
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fundControl = new FormControl();
   filteredFunds: Observable<Fund[]>;
-  selectedFunds: Fund[];
+  selectedFunds: Fund[] = [];
   allFunds: Fund[];
   dropdownSettings = {};
   @ViewChild('fundInput') fundInput: ElementRef<HTMLInputElement>;
@@ -61,7 +61,7 @@ export class FundSelectorComponent implements OnInit {
   }
 
   remove(fundToRemove: Fund): void {
-    const index = this.selectedFunds.findIndex(fund => fund.name === fundToRemove.name || fund.symbol === fundToRemove.symbol);
+    const index = this.selectedFunds.findIndex(fund => fund.name === fundToRemove.name && fund.symbol === fundToRemove.symbol);
 
     if (index >= 0) {
       this.selectedFunds.splice(index, 1);
@@ -69,17 +69,15 @@ export class FundSelectorComponent implements OnInit {
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    var value = event.option.viewValue;
-    var fundToAdd = this.allFunds.find(fund => fund.name === value || fund.symbol === value)
-
+    var fundToAdd = event.option.value;
     this.selectedFunds.push(fundToAdd);
     this.fundInput.nativeElement.value = '';
     this.fundControl.setValue(null);
   }
 
   private _filter(value: string): Fund[] {
-    const filterValue = value.toLowerCase();
+    const filterValue = value.toString().toLowerCase();
 
-    return this.allFunds.filter(fund => fund.name.toLowerCase().indexOf(filterValue) === 0 || fund.symbol.toLowerCase().indexOf(filterValue) === 0);
+    return this.allFunds.filter(fund => fund.name.toString().toLowerCase().indexOf(filterValue) === 0 || fund.symbol.toString().toLowerCase().indexOf(filterValue) === 0);
   }
 }
