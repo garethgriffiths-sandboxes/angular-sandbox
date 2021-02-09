@@ -4,9 +4,10 @@ import { FundDataService } from '../../services/fund-data.service';
 import { Fund } from '../../models/fund'
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
+import { MatAutocompleteSelectedEvent, MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { map, startWith } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatSelectionListChange } from '@angular/material/list';
 
 @Component({
   selector: 'fund-selector',
@@ -22,18 +23,10 @@ export class FundSelectorComponent implements OnInit {
       map((fund: string | null) => fund ? this._filter(fund) : this.allFunds.slice()));
   }
 
-  ngOnInit() {
-    this.getFunds();
-  }
-
-  getFunds(): void {
-    this.fundDataService.getFunds()
-      .subscribe(funds => this.allFunds = funds);
-  }
-
   visible = true;
   selectable = true;
   removable = true;
+  selectedFundsListHidden = true;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   fundControl = new FormControl();
   filteredFunds: Observable<Fund[]>;
@@ -42,6 +35,16 @@ export class FundSelectorComponent implements OnInit {
   dropdownSettings = {};
   @ViewChild('fundInput') fundInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
+  @ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger }) selectFundInputAutocomplete: MatAutocompleteTrigger;
+
+  ngOnInit() {
+    this.getFunds();
+  }
+
+  getFunds(): void {
+    this.fundDataService.getFunds()
+      .subscribe(funds => this.allFunds = funds);
+  }
 
   add(event: MatChipInputEvent): void {
     const input = event.input;
@@ -73,6 +76,20 @@ export class FundSelectorComponent implements OnInit {
     this.selectedFunds.push(fundToAdd);
     this.fundInput.nativeElement.value = '';
     this.fundControl.setValue(null);
+  }
+
+  toggleSelectedFundsListVisibility() {
+    this.selectedFundsListHidden = this.selectedFundsListHidden ? false : true;
+  }
+
+  onSelectFundInputClick(event: { stopPropagation: () => void; }) : void {
+    event.stopPropagation();
+    this.selectFundInputAutocomplete.openPanel();
+  }
+
+  onSelectedFundsListSelectionChange(event: MatSelectionListChange) {
+    var fundToRemove = event.option.value;
+    this.remove(fundToRemove);
   }
 
   private _filter(value: string): Fund[] {
