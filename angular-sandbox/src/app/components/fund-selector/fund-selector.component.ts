@@ -20,7 +20,8 @@ export class FundSelectorComponent implements OnInit {
     private fundDataService: FundDataService) {
     this.filteredFunds = this.fundControl.valueChanges.pipe(
       startWith(null),
-      map((fund: string | null) => fund ? this._filter(fund) : this.allFunds.slice()));
+      map((fund: string | null) => fund ? this._filter(fund) :
+        this.allFunds.slice().filter(fund => this.selectedFunds.indexOf(fund) < 0)));
   }
 
   visible = true;
@@ -31,7 +32,7 @@ export class FundSelectorComponent implements OnInit {
   fundControl = new FormControl();
   filteredFunds: Observable<Fund[]>;
   selectedFunds: Fund[] = [];
-  allFunds: Fund[];
+  allFunds: Fund[] = [];
   dropdownSettings = {};
   @ViewChild('fundInput') fundInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -43,7 +44,9 @@ export class FundSelectorComponent implements OnInit {
 
   getFunds(): void {
     this.fundDataService.getFunds()
-      .subscribe(funds => this.allFunds = funds);
+      .subscribe(funds => {
+        this.allFunds = funds.sort((fundOne, fundTwo) => fundOne.name.localeCompare(fundTwo.name));
+      });
   }
 
   add(event: MatChipInputEvent): void {
@@ -64,10 +67,12 @@ export class FundSelectorComponent implements OnInit {
   }
 
   remove(fundToRemove: Fund): void {
-    const index = this.selectedFunds.findIndex(fund => fund.name === fundToRemove.name && fund.symbol === fundToRemove.symbol);
+    const fund = this.selectedFunds.find(fund => fund.name === fundToRemove.name && fund.symbol === fundToRemove.symbol);
+    const fundIndex = this.selectedFunds.indexOf(fund);
 
-    if (index >= 0) {
-      this.selectedFunds.splice(index, 1);
+    if (fundIndex >= 0) {
+      this.selectedFunds.splice(fundIndex, 1);
+      this.fundControl.setValue(this.fundControl.value);
     }
   }
 
@@ -82,7 +87,7 @@ export class FundSelectorComponent implements OnInit {
     this.selectedFundsListHidden = this.selectedFundsListHidden ? false : true;
   }
 
-  onSelectFundInputClick(event: { stopPropagation: () => void; }) : void {
+  onSelectFundInputClick(event: { stopPropagation: () => void; }): void {
     event.stopPropagation();
     this.selectFundInputAutocomplete.openPanel();
   }
@@ -95,6 +100,9 @@ export class FundSelectorComponent implements OnInit {
   private _filter(value: string): Fund[] {
     const filterValue = value.toString().toLowerCase();
 
-    return this.allFunds.filter(fund => fund.name.toString().toLowerCase().indexOf(filterValue) === 0 || fund.symbol.toString().toLowerCase().indexOf(filterValue) === 0);
+    return this.allFunds.filter(fund =>
+      this.selectedFunds.indexOf(fund) < 0 && (
+        fund.name.toString().toLowerCase().indexOf(filterValue) === 0
+        || fund.symbol.toString().toLowerCase().indexOf(filterValue) === 0));
   }
 }
