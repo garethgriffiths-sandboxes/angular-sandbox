@@ -1,11 +1,14 @@
 .fund-selector {
+    padding: 15px;
     width: 100%;
+    display: flex;
+    justify-content: center;
 
     .form-field {
-        min-width: 50%;
+        min-width: 40%;
 
         .chip {
-            background-color: #74B54C;
+            background-color: #F07C00;
             color: #FFFFFF;
 
             .mat-icon {
