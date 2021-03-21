@@ -1,10 +1,18 @@
 <app-nav-menu></app-nav-menu>
 <div class="grid">
   <div class="tile">
-    <div class="tile-title">
-      <h4>Drowning in Data</h4>
-    </div>
-    <div class="tile-component">
-      <fund-selector></fund-selector>
+    <h4 class="title">Drowning in Data</h4>
+    <div>
+      <h5 class="title">Fund Selector</h5>
+      <div class="fund-selector">
+        <fund-selector></fund-selector>
+      </div>
+      <h5 class="title">Generic Selector</h5>
+      <div class="generic-selectors">
+        <generic-selector [itemNameSingular]="'Date'" [itemNamePlural]="'Dates'" [chipColour]="'#EC484F'">
+        </generic-selector>
+        <generic-selector [itemNameSingular]="'Type'" [itemNamePlural]="'Types'" [chipColour]="'#74B54C'">
+        </generic-selector>
+      </div>
     </div>
   </div>

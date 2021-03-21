@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FundDataService } from '../../services/fund-data.service';
 import { Fund } from '../models/fund'
@@ -10,12 +10,12 @@ import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSelectionListChange } from '@angular/material/list';
 
 @Component({
-  selector: 'fund-selector',
-  templateUrl: './fund-selector.component.html',
-  styleUrls: ['./fund-selector.component.scss']
+  selector: 'generic-selector',
+  templateUrl: './generic-selector.component.html',
+  styleUrls: ['./generic-selector.component.scss']
 })
 
-export class FundSelectorComponent implements OnInit {
+export class GenericSelectorComponent implements OnInit {
   constructor(
     private fundDataService: FundDataService) {
     this.filteredFunds = this.fundControl.valueChanges.pipe(
@@ -34,6 +34,9 @@ export class FundSelectorComponent implements OnInit {
   selectedFunds: Fund[] = [];
   allFunds: Fund[] = [];
   dropdownSettings = {};
+  @Input() itemNameSingular: string;
+  @Input() itemNamePlural: string;
+  @Input() chipColour: string;
   @ViewChild('fundInput') fundInput: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger }) selectFundInputAutocomplete: MatAutocompleteTrigger;
 

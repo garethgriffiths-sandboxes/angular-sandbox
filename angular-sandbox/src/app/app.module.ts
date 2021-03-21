@@ -16,6 +16,7 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
 import { FundSelectorComponent } from './components/fund-selector/fund-selector.component';
+import { GenericSelectorComponent } from './components/generic-selector/generic-selector.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ClickOutsideDirective } from './directives/click-outside';
 
@@ -25,6 +26,7 @@ import { ClickOutsideDirective } from './directives/click-outside';
     NavMenuComponent,
     HomeComponent,
     FundSelectorComponent,
+    GenericSelectorComponent,
     ClickOutsideDirective
   ],
   imports: [

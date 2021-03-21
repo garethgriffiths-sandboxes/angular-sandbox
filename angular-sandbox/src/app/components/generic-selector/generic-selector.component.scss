@@ -1,0 +1,49 @@
+.generic-selector {
+    padding-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    .form-field {
+        min-width: 70%;
+
+        .chip {
+            background-color: #F07C00;
+            color: #FFFFFF;
+
+            .mat-icon {
+                color: #FFFFFF;
+                opacity: 1;
+            }
+        }
+
+        .more-button {
+            position: relative;
+            right: 0;
+            display: inline-block;
+        }
+    }
+
+    .selected-items-list-panel {
+        position: absolute;
+        right: 0px;
+        border-radius: 0;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        background-color: #FFFFFF;
+        box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%),
+            0px 4px 5px 0px rgb(0 0 0 / 14%),
+            0px 1px 10px 0px rgb(0 0 0 / 12%);
+        z-index: 1000;
+
+        .close-button {
+            position: relative;
+            float: right;
+            margin: 5px;
+        }
+
+        .selection-list {
+            clear: both;
+        }
+    }
+}

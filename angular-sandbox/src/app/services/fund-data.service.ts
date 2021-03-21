@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of, from } from 'rxjs';
 import { catchError, concatMap } from 'rxjs/operators';
 
-import { Fund } from '../models/fund';
+import { Fund } from '../components/models/fund';
 
 const API_URL = environment.apiUrl;
 
