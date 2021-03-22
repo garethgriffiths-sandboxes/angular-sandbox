@@ -4,13 +4,14 @@
     <mat-chip-list #chipList>
       <mat-chip
         class="chip"
+        [style.background-color]="chipColour"
         *ngFor="let item of selectedItems"
         [ariaOrientation]="horizontal"
         [selectable]="selectable"
         [removable]="removable"
         (removed)="removeItem(item)"
       >
-        {{ item.name }}
+        {{ item.shortName }}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
       <input
@@ -21,6 +22,7 @@
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
         (matChipInputTokenEnd)="addItem($event)"
         (click)="onChipInputClick($event)"
+        (paste)="paste($event)"
       />
       <button
         class="more-button"
@@ -39,7 +41,7 @@
       (optionSelected)="addSelectedItem($event)"
     >
       <mat-option *ngFor="let item of filteredItems | async" [value]="item">
-        {{ item.name }}
+        {{ item.longName }}
       </mat-option>
     </mat-autocomplete>
     <div
@@ -66,7 +68,7 @@
           [checkboxPosition]="'before'"
           *ngFor="let item of selectedItems"
         >
-          {{ item.name }}
+          {{ item.longName }}
         </mat-list-option>
       </mat-selection-list>
     </div>

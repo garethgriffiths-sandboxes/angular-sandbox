@@ -15,12 +15,14 @@ export class ClickOutsideDirective {
   @Output()
   public clickOutside = new EventEmitter();
 
+  // listens to DOM events
   @HostListener('document:click', ['$event.target'])
   public onClick(targetElement: any): void {
     const clickedInside = this.elementRef.nativeElement.contains(
       targetElement
     );
     if (!clickedInside) {
+      // sends the event to subscribers 
       this.clickOutside.emit(null);
     }
   }

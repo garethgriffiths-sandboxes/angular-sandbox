@@ -1,38 +1,29 @@
-import {
-  Component,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { FundDataService } from '../../services/fund-data.service';
-import { Fund } from '../models/fund';
 import { FormControl } from '@angular/forms';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   MatAutocompleteSelectedEvent,
   MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
-import { startWith, map, takeUntil } from 'rxjs/operators';
+import { startWith, map } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSelectionListChange } from '@angular/material/list';
+import { GenericSelectorItem } from './generic-selector-item';
 
 @Component({
   selector: 'app-generic-selector',
   templateUrl: './generic-selector.component.html',
   styleUrls: ['./generic-selector.component.scss'],
 })
-export class GenericSelectorComponent implements OnInit, OnDestroy {
-  private readonly onDestroy = new Subject<void>();
-  constructor(private fundDataService: FundDataService) {
+export class GenericSelectorComponent {
+  constructor() {
     this.filteredItems = this.genericSelectorControl.valueChanges.pipe(
       startWith(null),
       map((item: string | null) =>
         item
           ? this._filter(item)
-          : this.allItems
+          : this.items
               .slice()
               .filter(
                 (currentItem) => this.selectedItems.indexOf(currentItem) < 0
@@ -40,36 +31,21 @@ export class GenericSelectorComponent implements OnInit, OnDestroy {
       )
     );
   }
-  @Input() itemNameSingular: string;
-  @Input() itemNamePlural: string;
-  @Input() chipColour: string;
-  @ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
-  @ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger })
+
+  @Input() itemNameSingular = 'Item';
+  @Input() itemNamePlural = 'Items';
+  @Input() chipColour = '#F07C00';
+  @Input() items: GenericSelectorItem[] = [];
+  filteredItems: Observable<GenericSelectorItem[]>;
+  selectedItems: GenericSelectorItem[] = [];
   visible = true;
   selectable = true;
   removable = true;
   selectedItemsListVisible = false;
   separatorKeysCodes: number[] = [ENTER, COMMA];
   genericSelectorControl = new FormControl();
-  filteredItems: Observable<Fund[]>;
-  selectedItems: Fund[] = [];
-  allItems: Fund[] = [];
-  genericSelectorAutocomplete: MatAutocompleteTrigger;
-
-  ngOnInit(): void {
-    this.getFunds();
-  }
-
-  getFunds(): void {
-    this.fundDataService
-      .getFunds()
-      .pipe(takeUntil(this.onDestroy))
-      .subscribe((items) => {
-        this.allItems = items.sort((itemOne, itemTwo) =>
-          itemOne.name.localeCompare(itemTwo.name)
-        );
-      });
-  }
+  @ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger }) genericSelectorAutocomplete: MatAutocompleteTrigger;
 
   addItem(event: MatChipInputEvent): void {
     if (event == null || event.value == null) {
@@ -78,15 +54,7 @@ export class GenericSelectorComponent implements OnInit, OnDestroy {
 
     const itemValue = event.value.toString().toLowerCase();
 
-    const itemToAdd = this.selectedItems.find(
-      (item) =>
-        item.name.toString().toLocaleLowerCase() === itemValue ||
-        item.symbol.toString().toLocaleLowerCase() === itemValue
-    );
-
-    if (itemToAdd) {
-      this.selectedItems.push(itemToAdd);
-    }
+    this._add(itemValue);
 
     const input = event.input;
     if (input) {
@@ -96,11 +64,11 @@ export class GenericSelectorComponent implements OnInit, OnDestroy {
     this.genericSelectorControl.setValue(null);
   }
 
-  removeItem(itemToRemove: Fund): void {
+  removeItem(itemToRemove: GenericSelectorItem): void {
     const item = this.selectedItems.find(
       (currentItem) =>
-        currentItem.name === itemToRemove.name &&
-        currentItem.symbol === itemToRemove.symbol
+        currentItem.shortName === itemToRemove.shortName &&
+        currentItem.longName === itemToRemove.longName
     );
 
     const itemIndex = this.selectedItems.indexOf(item);
@@ -136,22 +104,46 @@ export class GenericSelectorComponent implements OnInit, OnDestroy {
     this.removeItem(itemToRemove);
   }
 
-  ngOnDestroy(): void {
-    this.onDestroy.next();
+  paste(event: ClipboardEvent): void {
+    event.preventDefault();
+    event.clipboardData
+      .getData('Text')
+      .split(/,/)
+      .forEach((value) => {
+        if (value.trim()) {
+          this._add(value.trim());
+        }
+      });
   }
 
-  private _filter(value: string): Fund[] {
+  private _filter(value: string): GenericSelectorItem[] {
     if (value == null) {
       return;
     }
 
     const filterValue = value.toString().toLowerCase();
 
-    return this.allItems.filter(
+    return this.items.filter(
       (item) =>
         this.selectedItems.indexOf(item) < 0 &&
-        (item.name.toString().toLowerCase().includes(filterValue) ||
-          item.symbol.toString().toLowerCase().includes(filterValue))
+        (item.shortName.toString().toLowerCase().includes(filterValue) ||
+          item.longName.toString().toLowerCase().includes(filterValue))
     );
+  }
+
+  private _add(itemName: string): void {
+    if (!itemName) {
+      return;
+    }
+
+    const itemToAdd = this.selectedItems.find(
+      (item) =>
+        item.shortName.toString().toLocaleLowerCase() === itemName ||
+        item.longName.toString().toLocaleLowerCase() === itemName
+    );
+
+    if (itemToAdd) {
+      this.selectedItems.push(itemToAdd);
+    }
   }
 }
