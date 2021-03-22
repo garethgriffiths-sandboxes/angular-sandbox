@@ -1,36 +1,74 @@
 <div class="generic-selector">
   <mat-form-field class="form-field">
-    <mat-label>Funds</mat-label>
-    <mat-chip-list #chipList aria-label="Select a Fund">
-      <mat-chip class="chip" *ngFor="let fund of selectedFunds" [ariaOrientation]="horizontal" [selectable]="selectable"
-        [removable]="removable" (removed)="removeFund(fund)">
-        {{fund.symbol}}
+    <mat-label>{{ itemNamePlural }}</mat-label>
+    <mat-chip-list #chipList>
+      <mat-chip
+        class="chip"
+        *ngFor="let item of selectedItems"
+        [ariaOrientation]="horizontal"
+        [selectable]="selectable"
+        [removable]="removable"
+        (removed)="removeItem(item)"
+      >
+        {{ item.name }}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
-      <input #fundInput [formControl]="fundControl" [matAutocomplete]="selectFundInputAutocomplete"
-        [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        (matChipInputTokenEnd)="addFund($event)" (click)="onSelectFundInputClick($event)">
-      <button class="more-button" matTooltip="More" [matTooltipPosition]="'right'" mat-icon-button
-        [style.visibility]="selectedFunds.length > 2 ? 'visible' : 'hidden'"
-        (click)="toggleSelectedFundsListVisibility()" aria-label="More">
+      <input
+        #chipInput
+        [formControl]="genericSelectorControl"
+        [matAutocomplete]="genericSelectorAutocomplete"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="addItem($event)"
+        (click)="onChipInputClick($event)"
+      />
+      <button
+        class="more-button"
+        matTooltip="More"
+        [matTooltipPosition]="'right'"
+        mat-icon-button
+        [style.visibility]="selectedItems.length > 2 ? 'visible' : 'hidden'"
+        (click)="toggleSelectedItemsListVisibility()"
+        aria-label="More"
+      >
         <mat-icon>more_horiz</mat-icon>
       </button>
     </mat-chip-list>
-    <mat-autocomplete #selectFundInputAutocomplete="matAutocomplete" (optionSelected)="addSelectedFund($event)">
-      <mat-option *ngFor="let fund of filteredFunds | async" [value]="fund">
-        {{fund.symbol}} ({{fund.name}})
+    <mat-autocomplete
+      #genericSelectorAutocomplete="matAutocomplete"
+      (optionSelected)="addSelectedItem($event)"
+    >
+      <mat-option *ngFor="let item of filteredItems | async" [value]="item">
+        {{ item.name }}
       </mat-option>
     </mat-autocomplete>
-    <div [style.visibility]="selectedFundsListVisible ? 'visible' : 'hidden'" class="selected-items-list-panel">
-      <button class="close-button" matTooltip="Close" [matTooltipPosition]="'right'" mat-icon-button
-        (click)="toggleSelectedFundsListVisibility()" aria-label="Close">
+    <div
+      [style.visibility]="selectedItemsListVisible ? 'visible' : 'hidden'"
+      class="selected-items-list-panel"
+    >
+      <button
+        class="close-button"
+        matTooltip="Close"
+        [matTooltipPosition]="'right'"
+        mat-icon-button
+        (click)="toggleSelectedItemsListVisibility()"
+        aria-label="Close"
+      >
         <mat-icon>close</mat-icon>
       </button>
-      <mat-selection-list class="selection-list" (selectionChange)="onSelectedFundsListSelectionChange($event)">
-        <mat-list-option [selected]="true" [value]="fund" [checkboxPosition]="'before'"
-          *ngFor="let fund of selectedFunds">
-          {{fund.symbol}} ({{fund.name}})
+      <mat-selection-list
+        class="selection-list"
+        (selectionChange)="onSelectedItemsListSelectionChange($event)"
+      >
+        <mat-list-option
+          [selected]="true"
+          [value]="item"
+          [checkboxPosition]="'before'"
+          *ngFor="let item of selectedItems"
+        >
+          {{ item.name }}
         </mat-list-option>
       </mat-selection-list>
     </div>
   </mat-form-field>
+</div>

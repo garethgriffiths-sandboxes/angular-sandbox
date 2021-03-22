@@ -1,4 +1,5 @@
-export class ChipAutocompleteItem {
-    public name: string;
-    public value: any;
-  }
+export class GenericSelectorItem {
+  public shortName: string;
+  public longName: string;
+  public value: any;
+}

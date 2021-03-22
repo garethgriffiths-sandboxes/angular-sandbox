@@ -1,110 +1,157 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { FundDataService } from '../../services/fund-data.service';
-import { Fund } from '../models/fund'
+import { Fund } from '../models/fund';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import { map, startWith } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import {
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+} from '@angular/material/autocomplete';
+import { startWith, map, takeUntil } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { MatSelectionListChange } from '@angular/material/list';
 
 @Component({
-  selector: 'generic-selector',
+  selector: 'app-generic-selector',
   templateUrl: './generic-selector.component.html',
-  styleUrls: ['./generic-selector.component.scss']
+  styleUrls: ['./generic-selector.component.scss'],
 })
-
-export class GenericSelectorComponent implements OnInit {
-  constructor(
-    private fundDataService: FundDataService) {
-    this.filteredFunds = this.fundControl.valueChanges.pipe(
+export class GenericSelectorComponent implements OnInit, OnDestroy {
+  private readonly onDestroy = new Subject<void>();
+  constructor(private fundDataService: FundDataService) {
+    this.filteredItems = this.genericSelectorControl.valueChanges.pipe(
       startWith(null),
-      map((fund: string | null) => fund ? this._filter(fund) :
-        this.allFunds.slice().filter(fund => this.selectedFunds.indexOf(fund) < 0)));
+      map((item: string | null) =>
+        item
+          ? this._filter(item)
+          : this.allItems
+              .slice()
+              .filter(
+                (currentItem) => this.selectedItems.indexOf(currentItem) < 0
+              )
+      )
+    );
   }
-
-  visible = true;
-  selectable = true;
-  removable = true;
-  selectedFundsListVisible = false;
-  separatorKeysCodes: number[] = [ENTER, COMMA];
-  fundControl = new FormControl();
-  filteredFunds: Observable<Fund[]>;
-  selectedFunds: Fund[] = [];
-  allFunds: Fund[] = [];
-  dropdownSettings = {};
   @Input() itemNameSingular: string;
   @Input() itemNamePlural: string;
   @Input() chipColour: string;
-  @ViewChild('fundInput') fundInput: ElementRef<HTMLInputElement>;
-  @ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger }) selectFundInputAutocomplete: MatAutocompleteTrigger;
+  @ViewChild('chipInput') chipInput: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger, { read: MatAutocompleteTrigger })
+  visible = true;
+  selectable = true;
+  removable = true;
+  selectedItemsListVisible = false;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  genericSelectorControl = new FormControl();
+  filteredItems: Observable<Fund[]>;
+  selectedItems: Fund[] = [];
+  allItems: Fund[] = [];
+  genericSelectorAutocomplete: MatAutocompleteTrigger;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.getFunds();
   }
 
   getFunds(): void {
-    this.fundDataService.getFunds()
-      .subscribe(funds => {
-        this.allFunds = funds.sort((fundOne, fundTwo) => fundOne.name.localeCompare(fundTwo.name));
+    this.fundDataService
+      .getFunds()
+      .pipe(takeUntil(this.onDestroy))
+      .subscribe((items) => {
+        this.allItems = items.sort((itemOne, itemTwo) =>
+          itemOne.name.localeCompare(itemTwo.name)
+        );
       });
   }
 
-  addFund(event: MatChipInputEvent): void {
-    const input = event.input;
-    const value = event.value;
-
-    var fundToAdd = this.allFunds.find(fund => fund.name === value || fund.symbol === value)
-
-    if ((value || '').trim()) {
-      this.selectedFunds.push(fundToAdd);
+  addItem(event: MatChipInputEvent): void {
+    if (event == null || event.value == null) {
+      return;
     }
 
+    const itemValue = event.value.toString().toLowerCase();
+
+    const itemToAdd = this.selectedItems.find(
+      (item) =>
+        item.name.toString().toLocaleLowerCase() === itemValue ||
+        item.symbol.toString().toLocaleLowerCase() === itemValue
+    );
+
+    if (itemToAdd) {
+      this.selectedItems.push(itemToAdd);
+    }
+
+    const input = event.input;
     if (input) {
       input.value = '';
     }
 
-    this.fundControl.setValue(null);
+    this.genericSelectorControl.setValue(null);
   }
 
-  removeFund(fundToRemove: Fund): void {
-    const fund = this.selectedFunds.find(fund => fund.name === fundToRemove.name && fund.symbol === fundToRemove.symbol);
-    const fundIndex = this.selectedFunds.indexOf(fund);
+  removeItem(itemToRemove: Fund): void {
+    const item = this.selectedItems.find(
+      (currentItem) =>
+        currentItem.name === itemToRemove.name &&
+        currentItem.symbol === itemToRemove.symbol
+    );
 
-    if (fundIndex >= 0) {
-      this.selectedFunds.splice(fundIndex, 1);
-      this.fundControl.setValue(this.fundControl.value);
+    const itemIndex = this.selectedItems.indexOf(item);
+
+    if (itemIndex >= 0) {
+      this.selectedItems.splice(itemIndex, 1);
+      this.genericSelectorControl.setValue(this.genericSelectorControl.value);
     }
   }
 
-  addSelectedFund(event: MatAutocompleteSelectedEvent): void {
-    var fundToAdd = event.option.value;
-    this.selectedFunds.push(fundToAdd);
-    this.fundInput.nativeElement.value = '';
-    this.fundControl.setValue(null);
+  addSelectedItem(event: MatAutocompleteSelectedEvent): void {
+    const itemToAdd = event.option.value;
+    this.selectedItems.push(itemToAdd);
+    this.chipInput.nativeElement.value = '';
+    this.genericSelectorControl.setValue(null);
   }
 
-  toggleSelectedFundsListVisibility() {
-    this.selectedFundsListVisible = this.selectedFundsListVisible ? false : true;
+  toggleSelectedItemsListVisibility(): void {
+    this.selectedItemsListVisible = this.selectedItemsListVisible
+      ? false
+      : true;
   }
 
-  onSelectFundInputClick(event: { stopPropagation: () => void; }): void {
+  onChipInputClick(event: { stopPropagation: () => void }): void {
     event.stopPropagation();
-    this.selectFundInputAutocomplete.openPanel();
+    if (this.genericSelectorAutocomplete) {
+      this.genericSelectorAutocomplete.openPanel();
+    }
   }
 
-  onSelectedFundsListSelectionChange(event: MatSelectionListChange) {
-    var fundToRemove = event.option.value;
-    this.removeFund(fundToRemove);
+  onSelectedItemsListSelectionChange(event: MatSelectionListChange): void {
+    const itemToRemove = event.option.value;
+    this.removeItem(itemToRemove);
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy.next();
   }
 
   private _filter(value: string): Fund[] {
+    if (value == null) {
+      return;
+    }
+
     const filterValue = value.toString().toLowerCase();
 
-    return this.allFunds.filter(fund =>
-      this.selectedFunds.indexOf(fund) < 0 && (
-        fund.name.toString().toLowerCase().includes(filterValue)
-        || fund.symbol.toString().toLowerCase().includes(filterValue)));
+    return this.allItems.filter(
+      (item) =>
+        this.selectedItems.indexOf(item) < 0 &&
+        (item.name.toString().toLowerCase().includes(filterValue) ||
+          item.symbol.toString().toLowerCase().includes(filterValue))
+    );
   }
 }
