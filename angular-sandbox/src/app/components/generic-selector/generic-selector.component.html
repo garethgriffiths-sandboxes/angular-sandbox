@@ -9,7 +9,7 @@
         [ariaOrientation]="horizontal"
         [selectable]="selectable"
         [removable]="removable"
-        (removed)="removeItem(item)"
+        (removed)="removeClickedItem(item)"
       >
         {{ item.shortName }}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
@@ -20,7 +20,7 @@
         [matAutocomplete]="genericSelectorAutocomplete"
         [matChipInputFor]="chipList"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-        (matChipInputTokenEnd)="addItem($event)"
+        (matChipInputTokenEnd)="addTypedItem($event)"
         (click)="onChipInputClick($event)"
         (paste)="paste($event)"
       />
@@ -38,7 +38,7 @@
     </mat-chip-list>
     <mat-autocomplete
       #genericSelectorAutocomplete="matAutocomplete"
-      (optionSelected)="addSelectedItem($event)"
+      (optionSelected)="addClickedItem($event)"
     >
       <mat-option *ngFor="let item of filteredItems | async" [value]="item">
         {{ item.longName }}
