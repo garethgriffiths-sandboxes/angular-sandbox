@@ -1,11 +1,10 @@
 .generic-selector {
-    padding-top: 15px;
     width: 100%;
     display: flex;
     justify-content: center;
 
     .form-field {
-        min-width: 70%;
+        min-width: 100%;
 
         .chip {
             color: #FFFFFF;

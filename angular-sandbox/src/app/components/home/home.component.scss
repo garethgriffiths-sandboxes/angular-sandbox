@@ -2,23 +2,16 @@
   margin-top: 15px;
 
   .tile {
-    .title {
-      margin-left: 15px;
-    }
-
-    .fund-selector {
-      margin-top: 25px;
-      margin-bottom: 25px;
-    }
-
-    .generic-selectors {
+      margin-left: 20px;
+      margin-right: 20px;
+    .selectors {
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       width: 100%;
-      margin-top: 25px;
-      margin-bottom: 25px;
 
       > app-generic-selector {
+        margin-top: 40px;
+        margin-bottom: 40px;
         width: 100%;
       }
     }
